@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    environment:
+      - RANDOM_SEED=${RANDOM_SEED:-42}
+    volumes:
+      - ./models:/app/models:ro
+      - db-data:/app/backend
+    restart: unless-stopped
+
+volumes:
+  db-data:

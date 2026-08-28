@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered image quality assessment and defect detection system">
+    <title>Image Quality Assessment — AI-Powered Defect Detection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 16v-4"/>
+                        <path d="M12 8h.01"/>
+                    </svg>
+                    <h1>Image Quality Assessment</h1>
+                </div>
+                <p class="subtitle">AI-Powered Defect Detection</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section" id="upload-section">
+                <div class="upload-zone" id="upload-zone">
+                    <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    <p class="upload-text">Drag & drop an image here, or <label for="file-input" class="browse-link">browse</label></p>
+                    <p class="upload-hint">Supports: JPG, PNG, BMP, WebP, TIFF (max 10MB)</p>
+                    <input type="file" id="file-input" accept="image/*" hidden>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <section class="loading-section hidden" id="loading-section">
+                <div class="spinner"></div>
+                <p>Analyzing image quality...</p>
+            </section>
+
+            <!-- Error State -->
+            <section class="error-section hidden" id="error-section">
+                <div class="error-card">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="15" y1="9" x2="9" y2="15"/>
+                        <line x1="9" y1="9" x2="15" y2="15"/>
+                    </svg>
+                    <p id="error-message">An error occurred.</p>
+                    <button class="btn btn-secondary" onclick="resetUI()">Try Again</button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section hidden" id="results-section">
+                <div class="results-grid">
+                    <!-- Quality Score Card -->
+                    <div class="card score-card">
+                        <h2>Quality Score</h2>
+                        <div class="score-gauge">
+                            <svg viewBox="0 0 120 120" class="gauge-svg">
+                                <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+                                <circle cx="60" cy="60" r="50" class="gauge-fill" id="gauge-fill"/>
+                            </svg>
+                            <div class="score-value" id="score-value">--</div>
+                        </div>
+                        <div class="quality-label" id="quality-label">--</div>
+                        <div class="confidence-badge" id="confidence-badge">Confidence: --</div>
+                        <div class="model-info" id="model-info"></div>
+                    </div>
+
+                    <!-- Issues Card -->
+                    <div class="card issues-card">
+                        <h2>Detected Issues</h2>
+                        <div id="issues-list" class="issues-list">
+                            <p class="no-issues">No issues detected</p>
+                        </div>
+                    </div>
+
+                    <!-- Image Preview -->
+                    <div class="card preview-card">
+                        <h2>Uploaded Image</h2>
+                        <div class="image-container">
+                            <img id="preview-image" alt="Uploaded image preview">
+                        </div>
+                    </div>
+
+                    <!-- Heatmap -->
+                    <div class="card heatmap-card">
+                        <h2>CNN Attention Heatmap</h2>
+                        <p class="card-desc">Areas the model focused on during quality assessment</p>
+                        <div class="image-container">
+                            <img id="heatmap-image" alt="Quality attention heatmap">
+                        </div>
+                    </div>
+
+                    <!-- Image Statistics -->
+                    <div class="card stats-card">
+                        <h2>Image Statistics</h2>
+                        <div class="stats-grid" id="stats-grid"></div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary analyze-another" onclick="resetUI()">Analyze Another Image</button>
+            </section>
+
+            <!-- History Section -->
+            <section class="history-section">
+                <h2>Analysis History</h2>
+                <div class="history-table-wrapper">
+                    <table class="history-table" id="history-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Filename</th>
+                                <th>Score</th>
+                                <th>Label</th>
+                                <th>Issues</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-body">
+                            <tr><td colspan="6" class="empty-row">No analyses yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Image Quality Assessment — AI/ML Internship Assessment Project</p>
+        </footer>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
