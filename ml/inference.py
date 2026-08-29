@@ -165,13 +165,26 @@ class QualityAnalyzer:
                 "cnn_implied_label": cnn_label,
                 "model_type": self.model_type,
             },
+            "original_image": self._encode_image(bgr),
             "heatmap": self._encode_heatmap(bgr, cam),
         }
 
     @staticmethod
+    def _encode_image(bgr):
+        h, w = bgr.shape[:2]
+        max_dim = 600
+        if max(h, w) > max_dim:
+            scale = max_dim / max(h, w)
+            bgr = cv2.resize(bgr, (int(w * scale), int(h * scale)), interpolation=cv2.INTER_AREA)
+        ok, buf = cv2.imencode(".jpg", bgr, [cv2.IMWRITE_JPEG_QUALITY, 85])
+        if not ok:
+            return ""
+        return f"data:image/jpeg;base64,{base64.b64encode(buf.tobytes()).decode('ascii')}"
+
+    @staticmethod
     def _encode_heatmap(bgr, cam):
         heat = cv2.applyColorMap((cam * 255).astype(np.uint8), cv2.COLORMAP_JET)
-        overlay = cv2.addWeighted(bgr, 0.6, heat, 0.4, 0)
+        overlay = cv2.addWeighted(bgr, 0.5, heat, 0.5, 0)
         ok, buf = cv2.imencode(".png", overlay)
         if not ok:
             return ""

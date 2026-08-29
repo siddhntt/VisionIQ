@@ -22,18 +22,23 @@ def init_db(db_path=DATABASE_PATH):
     conn = get_connection(db_path)
     conn.execute("""
         CREATE TABLE IF NOT EXISTS analyses (
-            id            INTEGER PRIMARY KEY AUTOINCREMENT,
-            filename      TEXT NOT NULL,
-            quality_score REAL NOT NULL,
-            quality_label TEXT NOT NULL,
-            confidence    REAL NOT NULL,
-            issues_json   TEXT NOT NULL DEFAULT '[]',
-            image_stats   TEXT NOT NULL DEFAULT '{}',
-            model_signals TEXT NOT NULL DEFAULT '{}',
-            heatmap       TEXT DEFAULT '',
-            created_at    TEXT NOT NULL
+            id             INTEGER PRIMARY KEY AUTOINCREMENT,
+            filename       TEXT NOT NULL,
+            quality_score  REAL NOT NULL,
+            quality_label  TEXT NOT NULL,
+            confidence     REAL NOT NULL,
+            issues_json    TEXT NOT NULL DEFAULT '[]',
+            image_stats    TEXT NOT NULL DEFAULT '{}',
+            model_signals  TEXT NOT NULL DEFAULT '{}',
+            heatmap        TEXT DEFAULT '',
+            original_image TEXT DEFAULT '',
+            created_at     TEXT NOT NULL
         )
     """)
+    try:
+        conn.execute("ALTER TABLE analyses ADD COLUMN original_image TEXT DEFAULT ''")
+    except sqlite3.OperationalError:
+        pass
     conn.commit()
     conn.close()
 
@@ -43,13 +48,14 @@ def save_analysis(filename, result, db_path=DATABASE_PATH):
     cur = conn.execute(
         """INSERT INTO analyses
            (filename, quality_score, quality_label, confidence,
-            issues_json, image_stats, model_signals, heatmap, created_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            issues_json, image_stats, model_signals, heatmap, original_image, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (filename, result["quality_score"], result["quality_label"],
          result["confidence"], json.dumps(result.get("issues", [])),
          json.dumps(result.get("image_stats", {})),
          json.dumps(result.get("model_signals", {})),
          result.get("heatmap", ""),
+         result.get("original_image", ""),
          datetime.now(timezone.utc).isoformat()),
     )
     conn.commit()

@@ -61,13 +61,6 @@ async function loadAnalysisDetails(id) {
         $('loading-section').classList.add('hidden');
         $('error-section').classList.add('hidden');
 
-        // set preview image to heatmap if available
-        if (data.heatmap) {
-            $('preview-image').src = data.heatmap;
-        } else {
-            $('preview-image').src = '';
-        }
-
         showResults(data);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
@@ -148,7 +141,8 @@ function renderResults(r) {
         list.innerHTML = '<p class="no-issues">✓ No issues detected</p>';
     }
 
-    // heatmap
+    // images
+    if (r.original_image) $('preview-image').src = r.original_image;
     if (r.heatmap) $('heatmap-image').src = r.heatmap;
 
     // stats

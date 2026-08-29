@@ -41,6 +41,7 @@ class AnalysisResponse(BaseModel):
     issues: list[IssueDetail]
     image_stats: ImageStats
     model_signals: ModelSignals
+    original_image: str = ""
     heatmap: str = ""
     created_at: Optional[str] = None
 
@@ -53,6 +54,7 @@ class AnalysisListItem(BaseModel):
     issues: list[IssueDetail]
     image_stats: dict = {}
     model_signals: dict = {}
+    original_image: str = ""
     heatmap: str = ""
     created_at: str
 
