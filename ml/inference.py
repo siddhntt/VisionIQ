@@ -131,8 +131,18 @@ class QualityAnalyzer:
         if bgr.shape[0] < 16 or bgr.shape[1] < 16:
             raise ValueError("Image too small (min 16x16).")
 
-        feats = extract_features(bgr)
-        cnn_score, cam = self._cnn_score_and_cam(bgr)
+        orig_h, orig_w = bgr.shape[:2]
+
+        # Cap max dimension to 1024px for fast processing and low RAM usage on cloud
+        max_dim = 1024
+        if max(orig_h, orig_w) > max_dim:
+            scale = max_dim / max(orig_h, orig_w)
+            proc_bgr = cv2.resize(bgr, (int(orig_w * scale), int(orig_h * scale)), interpolation=cv2.INTER_AREA)
+        else:
+            proc_bgr = bgr
+
+        feats = extract_features(proc_bgr)
+        cnn_score, cam = self._cnn_score_and_cam(proc_bgr)
         issues = self._detect_issues(feats)
 
         # blend CNN score with issue penalties
@@ -149,8 +159,8 @@ class QualityAnalyzer:
             "confidence": confidence,
             "issues": issues,
             "image_stats": {
-                "width": int(bgr.shape[1]),
-                "height": int(bgr.shape[0]),
+                "width": int(orig_w),
+                "height": int(orig_h),
                 "mean_brightness": round(feats.mean_brightness, 1),
                 "sharpness_laplacian_var": round(feats.laplacian_variance, 1),
                 "noise_sigma_estimate": round(feats.noise_sigma_estimate, 2),
