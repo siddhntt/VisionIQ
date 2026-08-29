@@ -175,8 +175,8 @@ class QualityAnalyzer:
                 "cnn_implied_label": cnn_label,
                 "model_type": self.model_type,
             },
-            "original_image": self._encode_image(bgr),
-            "heatmap": self._encode_heatmap(bgr, cam),
+            "original_image": self._encode_image(proc_bgr),
+            "heatmap": self._encode_heatmap(proc_bgr, cam),
         }
 
     @staticmethod
