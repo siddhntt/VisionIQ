@@ -1,36 +1,41 @@
 # Image Quality Assessment
 
-> **Live Demo:** [https://visioniq-e7vk.onrender.com/](https://visioniq-e7vk.onrender.com/)
+> 🌐 **Live Demo (Optional):** [https://visioniq-e7vk.onrender.com/](https://visioniq-e7vk.onrender.com/)  
+> ⚠️ *(Note: Due to free-tier cloud hosting resource and memory limits, the deployed link might be sleeping, unstable, or not working. **Please use the Docker Compose setup below for reliable evaluation**).*
 
 Full-stack app that evaluates image quality using a hybrid ML approach — MobileNetV2 (transfer learning) for overall quality scoring and classical classifiers on hand-crafted features for specific issue detection.
 
 Detects: blur, underexposure, overexposure, noise, low contrast, JPEG corruption, and severe degradation.
 
-## Setup
+## Quick Start & Setup
 
-### Docker (easiest)
+### 1. Docker Compose (⭐ Primary & Recommended)
+Docker containerizes the entire frontend, backend, database, and pretrained models in a single command:
 
 ```bash
 docker compose up --build
-# open http://localhost:8000
 ```
+Once built, open **`http://localhost:8000`** in your browser.
 
-### Manual
+---
+
+### 2. Live Demo (Optional)
+You may also try the deployed cloud instance directly:
+👉 **[https://visioniq-e7vk.onrender.com/](https://visioniq-e7vk.onrender.com/)**  
+*(If the online link is down or unresponsive, please test using the Docker setup above).*
+
+---
+
+### 3. Manual Local Setup
+To run manually without Docker:
 
 ```bash
 pip install -r requirements.txt
 
-# generate dataset (needs Places365 images in data/places365_raw/)
-# then run notebooks in order:
-#   01_dataset_generation.ipynb
-#   02_feature_engineering.ipynb
-#   03_model_training.ipynb
-#   04_evaluation.ipynb
-#   05_inference_demo.ipynb
-
-# start server
+# Start FastAPI server + Frontend
 uvicorn backend.app:app --host 0.0.0.0 --port 8000
 ```
+Then navigate to **`http://localhost:8000`**.
 
 ## How It Works
 
