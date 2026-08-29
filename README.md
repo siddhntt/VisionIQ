@@ -1,7 +1,7 @@
 # Image Quality Assessment
 
-> 🌐 **Live Demo (Optional):** [https://visioniq-e7vk.onrender.com/](https://visioniq-e7vk.onrender.com/)  
-> ⚠️ *(Note: Due to free-tier cloud hosting resource and memory limits, the deployed link might be sleeping, unstable, or not working. **Please use the Docker Compose setup below for reliable evaluation**).*
+>  **Live Demo (Optional):** [https://visioniq-e7vk.onrender.com/](https://visioniq-e7vk.onrender.com/)  
+>  *(Note: Due to free-tier cloud hosting resource and memory limits, the deployed link might be sleeping, unstable, or not working. **Please use the Docker Compose setup below for reliable evaluation**).*
 
 Full-stack app that evaluates image quality using a hybrid ML approach — MobileNetV2 (transfer learning) for overall quality scoring and classical classifiers on hand-crafted features for specific issue detection.
 
@@ -9,7 +9,7 @@ Detects: blur, underexposure, overexposure, noise, low contrast, JPEG corruption
 
 ## Quick Start & Setup
 
-### 1. Docker Compose (⭐ Primary & Recommended)
+### 1. Docker Compose ( Primary & Recommended)
 Docker containerizes the entire frontend, backend, database, and pretrained models in a single command:
 
 ```bash
@@ -21,7 +21,7 @@ Once built, open **`http://localhost:8000`** in your browser.
 
 ### 2. Live Demo (Optional)
 You may also try the deployed cloud instance directly:
-👉 **[https://visioniq-e7vk.onrender.com/](https://visioniq-e7vk.onrender.com/)**  
+**[https://visioniq-e7vk.onrender.com/](https://visioniq-e7vk.onrender.com/)**  
 *(If the online link is down or unresponsive, please test using the Docker setup above).*
 
 ---
