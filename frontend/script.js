@@ -49,6 +49,32 @@ async function handleFile(file) {
     }
 }
 
+// view past analysis details
+async function loadAnalysisDetails(id) {
+    try {
+        const res = await fetch(`${API}/api/analyses/${id}`);
+        if (!res.ok) throw new Error('Analysis not found');
+        const data = await res.json();
+
+        // hide upload, show results
+        $('upload-section').classList.add('hidden');
+        $('loading-section').classList.add('hidden');
+        $('error-section').classList.add('hidden');
+
+        // set preview image to heatmap if available
+        if (data.heatmap) {
+            $('preview-image').src = data.heatmap;
+        } else {
+            $('preview-image').src = '';
+        }
+
+        showResults(data);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+        showError(err.message || 'Failed to load analysis details.');
+    }
+}
+
 // ui states
 function showLoading() {
     $('upload-section').classList.add('hidden');
@@ -115,7 +141,7 @@ function renderResults(r) {
                 </div>
                 <div class="issue-confidence">Confidence: ${(iss.confidence * 100).toFixed(1)}%</div>
                 ${iss.evidence ? `<div class="issue-evidence">${iss.evidence.map(e =>
-                    `${e.feature}=${e.value} (${e.direction})`).join(', ')}</div>` : ''}
+            `${e.feature}=${e.value} (${e.direction})`).join(', ')}</div>` : ''}
             </div>
         `).join('');
     } else {
@@ -133,12 +159,18 @@ function renderResults(r) {
         colorfulness: 'Colorfulness', entropy: 'Entropy', dynamic_range: 'Dynamic Range',
     };
     if (r.image_stats) {
-        $('stats-grid').innerHTML = Object.entries(r.image_stats).map(([k, v]) => `
-            <div class="stat-item">
-                <div class="stat-label">${statNames[k] || k}</div>
-                <div class="stat-value">${typeof v === 'number' ? v.toFixed(1) : v}</div>
-            </div>
-        `).join('');
+        $('stats-grid').innerHTML = Object.entries(r.image_stats).map(([k, v]) => {
+            let display = v;
+            if (typeof v === 'number') {
+                display = (k === 'width' || k === 'height') ? Math.round(v) : v.toFixed(1);
+            }
+            return `
+                <div class="stat-item">
+                    <div class="stat-label">${statNames[k] || k}</div>
+                    <div class="stat-value">${display}</div>
+                </div>
+            `;
+        }).join('');
     }
 }
 
@@ -156,7 +188,7 @@ async function loadHistory() {
         }
 
         tbody.innerHTML = data.analyses.map(a => `
-            <tr>
+            <tr class="history-row" onclick="loadAnalysisDetails(${a.id})" title="Click to view">
                 <td>${a.id}</td>
                 <td title="${a.filename}">${a.filename && a.filename.length > 25 ? a.filename.slice(0, 25) + '...' : (a.filename || '')}</td>
                 <td><strong>${Math.round(a.quality_score)}</strong></td>
@@ -171,3 +203,4 @@ async function loadHistory() {
 }
 
 document.addEventListener('DOMContentLoaded', loadHistory);
+

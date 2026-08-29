@@ -1,0 +1,1 @@
+["laplacian_variance", "high_freq_energy", "mean_brightness", "brightness_std", "frac_underexposed", "frac_overexposed", "dynamic_range", "michelson_contrast", "rms_contrast", "noise_sigma_estimate", "local_variance_mean", "mean_saturation", "saturation_std", "edge_density", "block_artifact_score", "entropy", "colorfulness", "texture_energy"]

@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-08-29 03:38:13",
+  "device": "cpu",
+  "dataset": {
+    "train": 42721,
+    "val": 9151,
+    "test": 9145
+  },
+  "mobilenet_history": [
+    {
+      "epoch": 1,
+      "loss": 15.957572006179902,
+      "val_mae": 
