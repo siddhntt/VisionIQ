@@ -86,7 +86,7 @@ async def get_analysis_by_id(analysis_id: int):
     return result
 
 
-@app.get("/api/health", response_model=HealthResponse)
+@app.api_route("/api/health", methods=["GET", "HEAD"], response_model=HealthResponse)
 async def health_check():
     try:
         analyzer = get_analyzer()
@@ -107,6 +107,11 @@ FRONTEND_DIR = PROJECT_ROOT / "frontend"
 if FRONTEND_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
-    @app.get("/")
+    @app.api_route("/", methods=["GET", "HEAD"])
     async def serve_frontend():
         return FileResponse(str(FRONTEND_DIR / "index.html"))
+
+    @app.get("/favicon.ico", include_in_schema=False)
+    async def favicon():
+        from fastapi import Response
+        return Response(status_code=204)
