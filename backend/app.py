@@ -43,14 +43,14 @@ async def startup():
 
 
 @app.post("/api/analyze", response_model=AnalysisResponse)
-async def analyze_image(file: UploadFile = File(...)):
+def analyze_image(file: UploadFile = File(...)):
     # validate extension
     if file.filename:
         ext = Path(file.filename).suffix.lower()
         if ext not in ALLOWED_EXTENSIONS:
             raise HTTPException(422, f"Unsupported file type '{ext}'")
 
-    image_bytes = await file.read()
+    image_bytes = file.file.read()
     if len(image_bytes) == 0:
         raise HTTPException(422, "Empty file")
     if len(image_bytes) > MAX_UPLOAD_SIZE_MB * 1024 * 1024:
