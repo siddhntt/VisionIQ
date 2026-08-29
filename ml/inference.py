@@ -16,8 +16,6 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-torch.set_num_threads(1)  # Single thread for cloud CPU stability
-
 from ml.features import extract_features, ImageFeatures
 from ml.model import QualityCNN, MobileNetV2Quality
 from ml.synthetic_data import ISSUE_TYPES
